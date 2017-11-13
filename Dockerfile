@@ -33,7 +33,7 @@ RUN R -e """install.packages(c('digest', 'gtable', 'plyr', 'reshape2', 'scales',
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 
 RUN git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
-    git clone https://github.com/pierreLec/KronaRShy /srv/shiny-server/kronarshy && \
+    git clone https://github.com/pierreLec/KronaRShy.git /srv/shiny-server/kronarshy && \
     git clone https://github.com/aghozlane/shaman_bioblend.git /usr/bin/shaman_bioblend && \
     mv /srv/shiny-server/shaman/* /srv/shiny-server/ && \
     rm -rf /srv/shiny-server/shaman && \
@@ -48,4 +48,4 @@ COPY shiny-server.sh /usr/bin/shiny-server.sh
 
 COPY run_kronarshy.R /usr/bin/run_kronarshy.R
 
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["/usr/bin/shiny-server.sh"] 
