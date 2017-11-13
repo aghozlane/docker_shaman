@@ -14,7 +14,12 @@ RUN apt-get update && apt-get install -y \
     libxml2 \
     git \
     libssl-dev \
-    libssh2-1-dev
+    libssh2-1-dev \
+    libnlopt-dev \
+    python3-pip \
+    python3-yaml 
+    
+RUN pip3 install bioblend python-daemon
 
 #Download and install shiny server
 RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
@@ -28,10 +33,12 @@ RUN R -e """install.packages(c('digest', 'gtable', 'plyr', 'reshape2', 'scales',
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 
 RUN git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
-    git clone https://github.com/pierreLec/KronaRShy /srv/shiny-server/kronarshy &&\
+    git clone https://github.com/pierreLec/KronaRShy /srv/shiny-server/kronarshy && \
+    git clone https://github.com/aghozlane/shaman_bioblend.git /usr/bin/shaman_bioblend && \
     mv /srv/shiny-server/shaman/* /srv/shiny-server/ && \
     rm -rf /srv/shiny-server/shaman && \
     chown -R shiny.shiny  /srv/shiny-server/
+
 
 EXPOSE 80
 
