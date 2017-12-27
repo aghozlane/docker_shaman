@@ -1,5 +1,5 @@
 #!/bin/sh
-mkdir /srv/shiny-server/www/masque/todo /srv/shiny-server/www/masque/doing /srv/shiny-server/www/masque/error /srv/shiny-server/www/masque/done
+mkdir -p /srv/shiny-server/www/masque/todo /srv/shiny-server/www/masque/doing /srv/shiny-server/www/masque/error /srv/shiny-server/www/masque/done
 chown shiny.shiny /srv/shiny-server/www/masque/todo /srv/shiny-server/www/masque/doing /srv/shiny-server/www/masque/error /srv/shiny-server/www/masque/done
 exec nohup /usr/bin/python3 /usr/bin/shaman_bioblend/shaman_bioblend.py  -w /srv/shiny-server/www/masque/ -s -d &
 
