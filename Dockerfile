@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 MAINTAINER Amine Ghozlane "amine.ghozlane@pasteur.fr"
 
@@ -29,31 +29,32 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install bioblend python-daemon
 
 #Download and install shiny server
-RUN wget --no-verbose https://cran.r-project.org/src/base/R-3/R-3.1.2.tar.gz -P /opt/ && \
-    tar -zxf /opt/R-3.1.2.tar.gz -C /opt && rm /opt/R-3.1.2.tar.gz && \
-    cd /opt/R-3.1.2/ && ./configure --with-x=no && \
-    make -j 4  && make install && cd / && rm -rf  /opt/R-3.1.2 && \  
+RUN wget --no-verbose https://cran.r-project.org/src/base/R-3/R-3.6.1.tar.gz -P /opt/ && \
+    tar -zxf /opt/R-3.6.1.tar.gz -C /opt && rm /opt/R-3.6.1.tar.gz && \
+    cd /opt/R-3.6.1/ && ./configure --with-x=no && \
+    make -j 4  && make install && cd / && rm -rf  /opt/R-3.6.1 && \  
     wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
     VERSION=$(cat version.txt)  && \
     wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
-    wget ftp://shiny01.hosting.pasteur.fr/pub/shaman_package.tar.gz -P /opt && \
+    wget ftp://shiny01.hosting.pasteur.fr/pub/shaman_20190809.tar.gz -P /opt && \
     mkdir /opt/packman
 
-RUN R -e """install.packages('devtools',repos='http://cran.univ-paris1.fr/');devtools::install_github(c('aghozlane/nlme'));install.packages(c('codetools', 'lattice', 'MASS', 'survival', 'packrat'), repos='http://cran.univ-paris1.fr/');library("packrat");packrat::unbundle('/opt/shaman_package.tar.gz', '/opt/packman')"""
+RUN R -e """install.packages('packrat', repos='http://cran.univ-paris1.fr/');library("packrat");packrat::unbundle('/opt/shaman_20190809.tar.gz', '/opt/packman')"""
 
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY .Rprofile  /srv/shiny-server/
 
-RUN git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
+RUN git clone https://github.com/pworinger/shaman.git /srv/shiny-server/shaman && \
+    #git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
     git clone https://github.com/pierreLec/KronaRShy.git /srv/shiny-server/kronarshy && \
     git clone https://github.com/aghozlane/shaman_bioblend.git /usr/bin/shaman_bioblend && \
     mv /srv/shiny-server/shaman/* /srv/shiny-server/ && \
     rm -rf /srv/shiny-server/shaman && \
     chown -R shiny.shiny  /srv/shiny-server/ && \
     chown -R shiny.shiny  /opt/packman/ && \
-    rm /opt/shaman_package.tar.gz && \
+    rm /opt/shaman_package6.tar.gz && \
     cp /srv/shiny-server/.Rprofile /srv/shiny-server/kronarshy/.Rprofile
 
 EXPOSE 3838
