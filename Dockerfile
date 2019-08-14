@@ -38,10 +38,10 @@ RUN wget --no-verbose https://cran.r-project.org/src/base/R-3/R-3.6.1.tar.gz -P 
     wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
-    wget ftp://shiny01.hosting.pasteur.fr/pub/shaman_20190809.tar.gz -P /opt && \
+    wget ftp://shiny01.hosting.pasteur.fr/pub/shaman_package_201908.tar.gz -P /opt && \
     mkdir /opt/packman
 
-RUN R -e """install.packages('packrat', repos='http://cran.univ-paris1.fr/');library("packrat");packrat::unbundle('/opt/shaman_20190809.tar.gz', '/opt/packman')"""
+RUN R -e """install.packages('packrat', repos='http://cran.univ-paris1.fr/');library("packrat");packrat::unbundle('/opt/shaman_package_201908.tar.gz', '/opt/packman')"""
 
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY .Rprofile  /srv/shiny-server/
@@ -54,7 +54,7 @@ RUN git clone https://github.com/pworinger/shaman.git /srv/shiny-server/shaman &
     rm -rf /srv/shiny-server/shaman && \
     chown -R shiny.shiny  /srv/shiny-server/ && \
     chown -R shiny.shiny  /opt/packman/ && \
-    rm /opt/shaman_package6.tar.gz && \
+    rm /opt/shaman_package_201908.tar.gz && \
     cp /srv/shiny-server/.Rprofile /srv/shiny-server/kronarshy/.Rprofile
 
 EXPOSE 3838
