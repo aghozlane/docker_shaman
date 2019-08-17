@@ -46,8 +46,7 @@ RUN R -e """install.packages('packrat', repos='http://cran.univ-paris1.fr/');lib
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY .Rprofile  /srv/shiny-server/
 
-RUN git clone https://github.com/pworinger/shaman.git /srv/shiny-server/shaman && \
-    #git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
+RUN git clone https://github.com/aghozlane/shaman.git /srv/shiny-server/shaman && \
     git clone https://github.com/pierreLec/KronaRShy.git /srv/shiny-server/kronarshy && \
     git clone https://github.com/aghozlane/shaman_bioblend.git /usr/bin/shaman_bioblend && \
     mv /srv/shiny-server/shaman/* /srv/shiny-server/ && \
